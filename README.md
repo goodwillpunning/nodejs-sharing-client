@@ -1,2 +1,2 @@
-# nodejs-sharing-client
+# Node.js Sharing Client
 A Node.js client for sharing data.
