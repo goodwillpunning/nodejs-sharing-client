@@ -16,7 +16,7 @@ The Node.js Delta Sharing connector requires **Node.js v16.9.0+**.
  
 You can download and install the Node.js connector using Node Package Manager:
  
-```
+```JavaScript
 npm install delta-sharing
 ```
  
@@ -27,7 +27,7 @@ npm install delta-sharing
 Before you can begin exploring shared datasets, you will need to create a sharing profile. A sharing profile contains important information about the sharing server for the connector, such as the URL of the sharing server, the sharing profile version number, and, in most cases, the access token.
 For example, the following sharing profile contains information for connecting to the public sharing server hosted by Databricks. The sample sharing profile can be found under `delta_sharing/examples` folder and can be downloaded and used to follow along with the Quickstart.
  
-```
+```JSON
 {
  "shareCredentialsVersion": 1,
  "endpoint": "https://sharing.delta.io/delta-sharing/",
@@ -39,7 +39,7 @@ For example, the following sharing profile contains information for connecting t
  
 Next, import the Delta Sharing Client class and create a Sharing Client. The Sharing Client will expect the file location to the Sharing Profile as an argument.
  
-```
+```JavaScript
 const { SharingClient }  = require('delta-sharing');
  
 // Specify the location to the Sharing Profile above
@@ -53,7 +53,7 @@ const client = new SharingClient(sharingProfile);
  
 Now you are ready to begin exploring the secure datasets! A `Share` is a logical container that can contain one more schemas, with one or more tables. Let's start with listing all the available Shares.
  
-```
+```JavaScript
 // List all available shares
 client.listSharesAsync().then(function(shares) {
  console.log('Listing shares...');
@@ -70,13 +70,13 @@ client.listSharesAsync().then(function(shares) {
  
 Now that we have a general understanding of these logical containers known as Shares, we can explore the contents of the Shares. For example, shared datasets are expressed using a hierarchical structure comprised of the Share name, a `#`, followed by the fully-qualified table name:
  
-```
+```JavaScript
 <share_name>#<schema_name>.<table_name>
 ```
  
 Let's take a look at the Schemas contained within a particular Share by asking our Sharing client to list them:
  
-```
+```JavaScript
 // List all schemas under a particular Share
 const share = new Share('airbnbshare');
 client.listSchemasAsync(share).then(function(schemas) {
@@ -94,7 +94,7 @@ client.listSchemasAsync(share).then(function(schemas) {
  
 Similarly, we can explore all of the tables contained within a Schema by asking our Sharing client to list them:
  
-```
+```JavaScript
 // List all tables in a particular Schema
 const schema = new Schema('listings', 'airbnbshare');
 client.listTablesAsync(schema).then(function(tables) {
@@ -112,7 +112,7 @@ client.listTablesAsync(schema).then(function(tables) {
  
 We can also interact with the Sharing Client to display the Metadata about the shared dataset. The Metadata will contain information about the Delta table, like partitioning information, table name and identifier, the table description, and the table schema.
  
-```
+```JavaScript
 // Query table metadata
 restClient.queryTableMetadataAsync(table).then(function(metaData) {
  console.log('Listing table metaData...');
@@ -129,7 +129,7 @@ You're now ready to begin loading the shared datasets and interacting with the d
  
 Let's begin by loading the sample dataset and performing simple  DataFrame operations like shape, columns, and size.
  
-```
+```JavaScript
 // Display simple characteristics of a DataFrame
 reader.createDataFrame().then(function(df) {
  console.log('Shape: ' + df.shape)
