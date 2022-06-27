@@ -1,8 +1,8 @@
 {
   "name": "delta_sharing",
-  "version": "0.5.0",
+  "version": "0.0.1",
   "description": "Delta Sharing is the industry's first open protocol for the secure, real-time exchange of large datasets.",
-  "main": "delta_sharing.js",
+  "main": "delta-sharing.js",
   "directories": {
     "test": "tests"
   },
@@ -11,28 +11,29 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/delta-io/delta-sharing.git"
+    "url": "git+https://github.com/goodwillpunning/nodejs-sharing-client.git"
   },
   "keywords": [
     "delta",
     "sharing",
-    "lake"
+    "lake",
+    "lakehouse"
   ],
   "author": "Will Girten",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/delta-io/delta-sharing/issues"
+    "url": "https://github.com/goodwillpunning/nodejs-sharing-client/issues"
   },
-  "homepage": "https://github.com/delta-io/delta-sharing#readme",
+  "homepage": "https://github.com/goodwillpunning/nodejs-sharing-client#readme",
   "devDependencies": {
-    "apache-arrow": "^7.0.0",
-    "axios": "^0.26.0",
-    "danfojs-node": "^1.0.2",
-    "mocha": "^9.2.0",
-    "parquetjs": "^0.11.2"
+    "mocha": "^9.2.0"
   },
   "dependencies": {
+    "apache-arrow": "^7.0.0",
     "parquetjs-lite": "^0.8.7",
-    "url-parse": "^1.5.10"
+    "parquetjs": "^0.11.2",
+    "url-parse": "^1.5.10",
+    "danfojs-node": "^1.0.2",
+    "axios": "^0.26.0"
   }
 }

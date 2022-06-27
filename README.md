@@ -40,7 +40,7 @@ For example, the following sharing profile contains information for connecting t
 Next, import the Delta Sharing Client class and create a Sharing Client. The Sharing Client will expect the file location to the Sharing Profile as an argument.
  
 ```JavaScript
-const { SharingClient }  = require('delta-sharing');
+const { SharingClient }  = require('delta_sharing');
  
 // Specify the location to the Sharing Profile above
 const sharingProfile = "./delta_sharing/examples/sample-profile.share";
