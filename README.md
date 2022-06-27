@@ -17,7 +17,7 @@ The Node.js Delta Sharing connector requires **Node.js v16.9.0+**.
 You can download and install the Node.js connector using Node Package Manager:
  
 ```JavaScript
-npm install delta-sharing
+npm install delta_sharing
 ```
  
 ## Quickstart
@@ -43,7 +43,7 @@ Next, import the Delta Sharing Client class and create a Sharing Client. The Sha
 const { SharingClient }  = require('delta_sharing');
  
 // Specify the location to the Sharing Profile above
-const sharingProfile = "./delta_sharing/examples/sample-profile.share";
+const sharingProfile = DeltaSharingProfile.readFromFile('./examples/sample-profile.share');
  
 // Create a Sharing Client to interact with the Sharing Server
 const client = new SharingClient(sharingProfile);
@@ -78,7 +78,7 @@ Let's take a look at the Schemas contained within a particular Share by asking o
  
 ```JavaScript
 // List all schemas under a particular Share
-const share = new Share('airbnbshare');
+const share = new Share('delta_sharing');
 client.listSchemasAsync(share).then(function(schemas) {
  console.log('Listing schemas...');
  schemas.map(function(schema) {
@@ -96,15 +96,15 @@ Similarly, we can explore all of the tables contained within a Schema by asking 
  
 ```JavaScript
 // List all tables in a particular Schema
-const schema = new Schema('listings', 'airbnbshare');
+const schema = new Schema('default', 'delta_sharing');
 client.listTablesAsync(schema).then(function(tables) {
- console.log('Listing tables in schema...');
- tables.map(function(table) {
-   console.log(table.toString());
- });
+  console.log('Listing tables in schema...');
+  tables.map(function(table) {
+    console.log(table.toString());
+  });
 })
 .catch(function(error) {
- console.log(error.toString());
+  console.log(error.toString());
 });
 ```
  
@@ -114,6 +114,7 @@ We can also interact with the Sharing Client to display the Metadata about the s
  
 ```JavaScript
 // Query table metadata
+const table = new Table('boston-housing', 'delta_sharing', 'default');
 restClient.queryTableMetadataAsync(table).then(function(metaData) {
  console.log('Listing table metaData...');
  console.log(metaData.toString()) 
@@ -131,14 +132,17 @@ Let's begin by loading the sample dataset and performing simple  DataFrame opera
  
 ```JavaScript
 // Display simple characteristics of a DataFrame
+const reader = new DeltaSharingReader(table, restClient);
 reader.createDataFrame().then(function(df) {
- console.log('Shape: ' + df.shape)
- console.log('Columns: ' + df.columns)
- console.log('Size: ' + df.size)
- 
+  console.log('Created DataFrame')
+  // display contents of the DataFrame
+  df.print()
+  console.log('Shape: ' + df.shape)
+  console.log('Columns: ' + df.columns)
+  console.log('Size: ' + df.size)
 })
 .catch(function(error) {
- console.log(error);
+  console.log(error);
 });
 ```
 
@@ -146,7 +150,10 @@ reader.createDataFrame().then(function(df) {
 
 I hope this short tutorial was fun and has inspired you to use the Node.js Delta Sharing connector in your next Node.js application.
 
- 
+## Running the Sample Node.js Application
+
+Alternatively, a sample Node.js application can be found at the `/delta_sharing/examples/app.js` which includes all of the examples above. Simply download the Node.js package dependencies and execute the `app.js` file in your Node.js runtime environment. 
+
 ## Additional Documentation
  
 For more information about the Delta Sharing project, including information about the protocol and the Sharing Server REST API, please see the [the protocol documentation](https://github.com/delta-io/delta-sharing/blob/main/PROTOCOL.md) for additional details.
