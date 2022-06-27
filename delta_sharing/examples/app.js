@@ -18,11 +18,9 @@ const { DeltaSharingProfile, Share, Schema, Table } = require('../protocol.js');
 const { DeltaSharingReader } = require('../reader.js');
 const { DataSharingRestClient } = require('../rest-client.js');
 
-const profile = new DeltaSharingProfile('../test/test-profile.json');
+const profile = DeltaSharingProfile.readFromFile('./test/test-profile.json');
 const client = new SharingClient(profile);
 const restClient = new DataSharingRestClient(profile);
-const table = new Table('nyc', 'airbnbshare', 'listings');
-const reader = new DeltaSharingReader(table, restClient);
 
 // List all shares
 client.listSharesAsync().then(function(shares) {
@@ -36,7 +34,7 @@ client.listSharesAsync().then(function(shares) {
 });
 
 // List all schemas
-const share = new Share('airbnbshare');
+const share = new Share('delta_sharing');
 client.listSchemasAsync(share).then(function(schemas) {
   console.log('Listing schemas...');
   schemas.map(function(schema) {
@@ -48,7 +46,7 @@ client.listSchemasAsync(share).then(function(schemas) {
 });
 
 // List all tables in a schema
-const schema = new Schema('listings', 'airbnbshare');
+const schema = new Schema('default', 'delta_sharing');
 client.listTablesAsync(schema).then(function(tables) {
   console.log('Listing tables in schema...');
   tables.map(function(table) {
@@ -75,6 +73,7 @@ var url = "<profile>#<share>.<schema>.<table>"
 console.log(parseUrl(url));
 
 // List files in table
+const table = new Table('boston-housing', 'delta_sharing', 'default');
 restClient.listFilesInTable(table).then(function(files) {
   console.log('Listing all files...');
   console.log(files.toString())  
@@ -93,13 +92,13 @@ restClient.queryTableMetadataAsync(table).then(function(metaData) {
 });
 
 // Create a DataFrame
+const reader = new DeltaSharingReader(table, restClient);
 reader.createDataFrame().then(function(df) {
   console.log('Created DataFrame')
-  console.log(df.print())
+  df.print()
   console.log('Shape: ' + df.shape)
   console.log('Columns: ' + df.columns)
   console.log('Size: ' + df.size)
-
 })
 .catch(function(error) {
   console.log(error);

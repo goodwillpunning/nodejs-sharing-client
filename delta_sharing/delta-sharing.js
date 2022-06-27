@@ -29,11 +29,11 @@ const dfd = require("danfojs-node");
  *
  */
 function parseUrl(url) {
-    var shapeIndex = url.indexOf("#");
+    let shapeIndex = url.indexOf("#");
     if (shapeIndex < 0)
         throw "Invalid 'url': " + url;
-    var profile = url.substring(0, shapeIndex);
-    var fragments = url.substring(shapeIndex + 1).split(".");
+    let profile = url.substring(0, shapeIndex);
+    let fragments = url.substring(shapeIndex + 1).split(".");
     if (fragments.length != 3)
         throw "Invalid 'url': " + url;
     let share, schema, table;
@@ -77,12 +77,12 @@ class SharingClient {
     }
 
     async #listAllTablesInShare(share) {
-        var tables = []
-        var pageToken = null
+        let tables = []
+        let pageToken = null
         while (true) {
             var response = await this._restClient.listAllTablesAsync(share, pageToken);
             tables = tables.concat(response.tables)
-            var pageToken = response.nextPageToken
+            pageToken = response.nextPageToken
             if (pageToken == null) {
                 return tables
             }
@@ -95,10 +95,10 @@ class SharingClient {
      * @return {Share} the shares that can be accessed.
      */
     async listSharesAsync() {
-        var shares = []
-        var pageToken = null
+        let shares = []
+        let pageToken = null
         while (true) {
-            var response = await this._restClient.listSharesAsync(pageToken);
+            let response = await this._restClient.listSharesAsync(pageToken);
             shares = shares.concat(response.shares)
             pageToken = response.nextPageToken
             if (pageToken == null) {
@@ -114,10 +114,10 @@ class SharingClient {
      * @return {Array} the schemas in a share.
      */
     async listSchemasAsync(share) {
-        var schemas = []
-        var pageToken = null
+        let schemas = []
+        let pageToken = null
         while (true) {
-            var response = await this._restClient.listSchemasAsync(share, pageToken)
+            let response = await this._restClient.listSchemasAsync(share, pageToken)
             schemas = schemas.concat(response.schemas)
             pageToken = response.nextPageToken
             if (pageToken == null) {
@@ -133,10 +133,10 @@ class SharingClient {
      * @return {Array} the tables in a schema.
      */
     async listTablesAsync(schema) {
-        var tables = []
-        var pageToken = null
+        let tables = []
+        let pageToken = null
         while (true) {
-            var response = await this._restClient.listTablesAsync(schema, pageToken)
+            let response = await this._restClient.listTablesAsync(schema, pageToken)
             tables = tables.concat(response.tables)
             pageToken = response.nextPageToken
             if (pageToken == null) {
@@ -152,7 +152,7 @@ class SharingClient {
      */
     async listAllTablesAsync() {
         const shares = await this.listSharesAsync();
-        var allTables = []
+        let allTables = []
         try {
             for(const share of shares) {
                 const tablesInShare = await this.#listAllTablesInShare(share);
@@ -166,13 +166,13 @@ class SharingClient {
             if (parsedErrorJson['status'] == 404) {
                 // The server doesn't support all-tables API. Fallback to the old APIs instead.
                 console.warn('The Delta Sharing Server does not support all-tables API calls.');
-                var allSchemas = [];
+                let allSchemas = [];
                 for(const share of shares) {
-                    var schemas = await this.listSchemasAsync(share);
+                    let schemas = await this.listSchemasAsync(share);
                     allSchemas = allSchemas.concat(schemas);
                 }
                 for(const schema of allSchemas) {
-                    var tablesInShare = await this.listTablesAsync(schema);
+                    let tablesInShare = await this.listTablesAsync(schema);
                     allTables = allTables.concat(tablesInShare);
                 }
                 return allTables;

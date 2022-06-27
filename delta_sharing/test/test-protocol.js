@@ -27,14 +27,14 @@ const {
 
 describe('The Delta Sharing Profile object', function() {
     it('should be able to correctly parse a JSON sharing profile', function() {
-        var json = `
+        let json = `
             {
                 "shareCredentialsVersion": 1,
                 "endpoint": "https://localhost/delta-sharing/",
                 "bearerToken": "token"
             }
             `;
-        profile = DeltaSharingProfile.fromJson(json);
+        let profile = DeltaSharingProfile.fromJson(json);
         assert.deepEqual(profile, new DeltaSharingProfile(
             shareCredentialsVersion = 1,
             endpoint = "https://localhost/delta-sharing",
@@ -59,8 +59,8 @@ describe('The Delta Sharing Profile object', function() {
     })
 
     it('should be able to correctly parse a file-based sharing profile', function() {
-        var profilePath = './test/test-profile.json';
-        var profile = DeltaSharingProfile.readFromFile(profilePath);
+        let profilePath = './test/test-profile.json';
+        let profile = DeltaSharingProfile.readFromFile(profilePath);
         assert.deepEqual(profile, new DeltaSharingProfile(
             shareCredentialsVersion = 1,
             endpoint = "https://localhost:12345/delta-sharing",
