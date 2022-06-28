@@ -1,5 +1,5 @@
 {
-  "name": "delta_sharing",
+  "name": "delta-sharing",
   "version": "0.0.1",
   "description": "Delta Sharing is the industry's first open protocol for the secure, real-time exchange of large datasets.",
   "main": "delta-sharing.js",

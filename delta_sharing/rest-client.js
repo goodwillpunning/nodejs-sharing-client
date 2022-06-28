@@ -15,13 +15,9 @@
  */
 'use strict';
 
-const util = require('util');
 const axios = require('axios');
-const assert = require('assert');
-const fs = require('fs');
 const packageJson = require('./package.json');
 const {
-    DeltaSharingProfile,
     Share,
     Schema,
     Table,
@@ -29,7 +25,6 @@ const {
     Metadata,
     AddFile
 } = require('./protocol.js');
-const { parse } = require('path');
 
 class ListSharesResponse {
     constructor(shares, nextPageToken) {

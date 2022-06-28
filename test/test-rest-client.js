@@ -25,7 +25,7 @@ const {
     QueryTableVersionResponse,
     ListFilesInTableResponse,
     DataSharingRestClient
-} = require('../rest-client.js');
+} = require('../delta_sharing/rest-client.js');
 const {
     DeltaSharingProfile,
     Share,
@@ -35,7 +35,7 @@ const {
     Format,
     Metadata,
     AddFile
-} = require('../protocol.js');
+} = require('../delta_sharing/protocol.js');
 const json = `
     {
         "shareCredentialsVersion": 1,

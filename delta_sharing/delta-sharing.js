@@ -15,11 +15,18 @@
  */
 'use strict';
 
-const fs = require('fs');
-const { DeltaSharingProfile, Share } = require('./protocol.js');
+const {
+    DeltaSharingProfile,
+    Share,
+    Schema,
+    Table,
+    Protocol,
+    Format,
+    Metadata,
+    AddFile
+} = require('./protocol.js');
 const { DataSharingRestClient } = require('./rest-client.js');
-const dfd = require("danfojs-node");
-
+const { DeltaSharingReader } = require('./reader.js');
 
 /**
  *  Parses a shared dataset URL.
@@ -183,4 +190,16 @@ class SharingClient {
     }
 }
 
-module.exports = { SharingClient, parseUrl };
+module.exports = {
+    SharingClient,
+    DeltaSharingProfile,
+    Share,
+    Schema,
+    Table,
+    Protocol,
+    Format,
+    Metadata,
+    AddFile,
+    DataSharingRestClient,
+    DeltaSharingReader
+};

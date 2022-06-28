@@ -23,7 +23,7 @@ const {
     Format,
     Metadata,
     AddFile
-} = require('../protocol.js');
+} = require('../delta_sharing/protocol.js');
 
 describe('The Delta Sharing Profile object', function() {
     it('should be able to correctly parse a JSON sharing profile', function() {

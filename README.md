@@ -17,7 +17,7 @@ The Node.js Delta Sharing connector requires **Node.js v16.9.0+**.
 You can download and install the Node.js connector using Node Package Manager:
  
 ```JavaScript
-npm install delta_sharing
+npm install delta-sharing
 ```
  
 ## Quickstart
@@ -40,10 +40,28 @@ For example, the following sharing profile contains information for connecting t
 Next, import the Delta Sharing Client class and create a Sharing Client. The Sharing Client will expect the file location to the Sharing Profile as an argument.
  
 ```JavaScript
-const { SharingClient }  = require('delta_sharing');
+const {
+  SharingClient,
+  DeltaSharingProfile,
+  Share,
+  Schema,
+  Table,
+  DeltaSharingReader,
+  DataSharingRestClient
+} = require('delta-sharing');
  
-// Specify the location to the Sharing Profile above
+// Specify the location to the Sharing Profile above as a local file
 const sharingProfile = DeltaSharingProfile.readFromFile('./examples/sample-profile.share');
+
+// ...Or the sharing profile can be expressed as a JSON String
+const jsonString = `
+{
+    "shareCredentialsVersion": 1,
+    "endpoint": "https://sharing.delta.io/delta-sharing/",
+    "bearerToken": "faaie590d541265bcab1f2de9813274bf233"
+}
+`;
+const sharingProfileFromJSON = DeltaSharingProfile.fromJson(jsonString);
  
 // Create a Sharing Client to interact with the Sharing Server
 const client = new SharingClient(sharingProfile);
@@ -152,7 +170,15 @@ I hope this short tutorial was fun and has inspired you to use the Node.js Delta
 
 ## Running the Sample Node.js Application
 
-Alternatively, a sample Node.js application can be found at the `/delta_sharing/examples/app.js` which includes all of the examples above. Simply download the Node.js package dependencies and execute the `app.js` file in your Node.js runtime environment. 
+Alternatively, a sample Node.js application can be found at the `/delta_sharing/examples/app.js` which includes all of the examples above. Simply link the Node.js package, install the dependencies, and execute the `app.js` file in your Node.js runtime environment. 
+
+```bash
+cd delta_sharing
+npm link
+cd ../examples
+npm link install delta-sharing
+node app.js
+```
 
 ## Additional Documentation
  

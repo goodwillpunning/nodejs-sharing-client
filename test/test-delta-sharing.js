@@ -15,7 +15,7 @@
  */
 const assert = require('assert');
 const fs = require('fs');
-const SharingClient = require('../delta-sharing.js');
+const SharingClient = require('../delta_sharing/delta-sharing.js');
 const {
     DeltaSharingProfile,
     Share,
@@ -24,7 +24,7 @@ const {
     Format,
     Metadata,
     AddFile
-} = require('../protocol.js');
+} = require('../delta_sharing/protocol.js');
 const {
     ListSharesResponse,
     ListSchemasResponse,
@@ -34,7 +34,7 @@ const {
     QueryTableVersionResponse,
     ListFilesInTableResponse,
     DataSharingRestClient
-} = require('../rest-client.js');
+} = require('../delta_sharing/rest-client.js');
 
 const profile = new DeltaSharingProfile("./test-profile.json")
 const sharingClient = new SharingClient(profile)
