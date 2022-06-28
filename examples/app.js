@@ -13,12 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const { SharingClient, parseUrl }  = require('../delta-sharing.js');
-const { DeltaSharingProfile, Share, Schema, Table } = require('../protocol.js');
-const { DeltaSharingReader } = require('../reader.js');
-const { DataSharingRestClient } = require('../rest-client.js');
+const {
+  SharingClient,
+  DeltaSharingProfile,
+  Share,
+  Schema,
+  Table,
+  DeltaSharingReader,
+  DataSharingRestClient
+} = require('delta-sharing');
 
-const profile = DeltaSharingProfile.readFromFile('./test/test-profile.json');
+const json = `
+    {
+        "shareCredentialsVersion": 1,
+        "endpoint": "https://sharing.delta.io/delta-sharing/",
+        "bearerToken": "faaie590d541265bcab1f2de9813274bf233"
+    }
+    `;
+const profile = DeltaSharingProfile.fromJson(json);
 const client = new SharingClient(profile);
 const restClient = new DataSharingRestClient(profile);
 
@@ -68,10 +80,6 @@ client.listAllTablesAsync().then(function(tables) {
   console.log(error);
 });
 
-// Parse a sharing URL
-var url = "<profile>#<share>.<schema>.<table>"
-console.log(parseUrl(url));
-
 // List files in table
 const table = new Table('boston-housing', 'delta_sharing', 'default');
 restClient.listFilesInTable(table).then(function(files) {
@@ -95,7 +103,9 @@ restClient.queryTableMetadataAsync(table).then(function(metaData) {
 const reader = new DeltaSharingReader(table, restClient);
 reader.createDataFrame().then(function(df) {
   console.log('Created DataFrame')
+  // Display the DataFrame 
   df.print()
+  // Print some characteristics of the DataFrame
   console.log('Shape: ' + df.shape)
   console.log('Columns: ' + df.columns)
   console.log('Size: ' + df.size)
