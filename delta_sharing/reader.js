@@ -59,7 +59,7 @@ class DeltaSharingReader {
         );
     }
 
-    getEmptyTable(schemaJson) {
+    getEmptyDataFrame(schemaJson) {
         return new dfd.DataFrame()
     }
 
@@ -73,13 +73,15 @@ class DeltaSharingReader {
 
         // Return an empty DataFrame if no data present
         if (response.addFiles.length == 0 || this.#limit == 0) {
-            return this.getEmptyTable(schemaJson)
+            return this.getEmptyDataFrame(schemaJson)
         }
 
         var dfPromises = []
         if (this.#limit == null) {
             for (const addFile of response.addFiles) {
-                dfPromises.push(this.#toDF(addFile, null, null))
+                const dataPromise = this.#toArray(addFile, null, null)
+                    .then(a => new dfd.DataFrame(a))
+                dfPromises.push(dataPromise);
             }
             var finalDf = await Promise.all(dfPromises)
             .then(function(dfs) {
@@ -94,22 +96,46 @@ class DeltaSharingReader {
         }
     }
 
-    async #toDF(addFile, converters, limit) {
-
-        const url = addFile.url
+    async #toArray(addFile, converters, limit) {
+        const url = addFile.url;
         var protocol = parse(addFile.url, true).protocol
 
         let reader = await parquet.ParquetReader.openUrl(request, url)
         let cursor = reader.getCursor();
         let record = null;
-        var json_rows = [];
+        const json_rows = [];
         while (record = await cursor.next()) {
             json_rows.push(record);
         }
-        reader.close();
+        await reader.close();
 
-        return new dfd.DataFrame(json_rows)
+        return json_rows;
+    }
 
+    getEmptyArray(schemaJson) {
+        return [];
+    }
+
+    async createDataArray() {
+        const response = await this.#restClient.listFilesInTable(
+            this.#table, this.#predicateHints, this.#limit
+        );
+
+        const schemaJson = response.metadata.schemaString;
+
+        // Return an empty array if no data present
+        if (response.addFiles.length === 0 || this.#limit == 0) {
+            return this.getEmptyArray(schemaJson)
+        }
+
+        const dataPromises = []
+        if (this.#limit == null) {
+            for (const addFile of response.addFiles) {
+                dataPromises.push(this.#toArray(addFile, null, null))
+            }
+            const results = await Promise.all(dataPromises);
+            return results.flat();
+        }
     }
 }
 
