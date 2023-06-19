@@ -1,6 +1,6 @@
 {
   "name": "delta-sharing",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Delta Sharing is the industry's first open protocol for the secure, real-time exchange of large datasets.",
   "main": "delta-sharing.js",
   "directories": {
@@ -32,7 +32,6 @@
     "apache-arrow": "^12.0.1",
     "axios": "^1.4.0",
     "danfojs-node": "^1.1.2",
-    "package.json": "^0.0.0",
     "parquetjs-lite": "^0.8.7",
     "url-parse": "^1.5.10"
   }
