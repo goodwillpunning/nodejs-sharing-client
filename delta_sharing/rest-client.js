@@ -227,12 +227,16 @@ class DataSharingRestClient {
         });
     }
 
-    listFilesInTable(table, predicateHints = null, limitHint = null) {
+    listFilesInTable(table, predicateHints = null, limitHint = null, jsonPredicateHints = null, version = null) {
         var data = {};
         if (predicateHints != null)
             data["predicateHints"] = predicateHints;
         if (limitHint != null)
             data["limitHint"] = limitHint;
+        if (jsonPredicateHints != null)
+            data["jsonPredicateHints"] = jsonPredicateHints;
+        if (version != null)
+            data["version"] = version;
         const api_url = '/shares/' + table.share +'/schemas/' + table.schema + '/tables/' + table.tableName + '/query'
         return this._session.post(api_url, {params: data})
         .then(response => {

@@ -26,8 +26,10 @@ class DeltaSharingReader {
     #restClient = null;
     #predicateHints = null;
     #limit = null;
+    #jsonPredicateHints = null;
+    #version = null;
 
-    constructor(table, restClient, predicateHints = null, limit = null){
+    constructor(table, restClient, predicateHints = null, limit = null, jsonPredicateHints = null, version = null){
         this.#table = table;
         this.#restClient = restClient;
         if (predicateHints != null) {
@@ -35,6 +37,12 @@ class DeltaSharingReader {
         }
         if (limit != null) {
             this.#limit = limit;
+        }
+        if (jsonPredicateHints != null) {
+            this.#jsonPredicateHints = jsonPredicateHints;
+        }
+        if (version != null) {
+            this.#version = version;
         }
     }
 
@@ -49,6 +57,15 @@ class DeltaSharingReader {
     limit(limit = null) {
         return this.#copy(this.#predicateHints, limit);
     }
+
+    jsonPredicateHints(jsonPredicateHints = null) {
+        return this.#copy(this.#predicateHints, this.#limit, jsonPredicateHints);
+    }   
+
+    version(version = null) {
+        return this.#copy(this.#predicateHints, this.#limit, this.#jsonPredicateHints, version);
+    }
+    
 
     #copy(predicateHints = null, limit = null) {
         return new DeltaSharingReader(
@@ -66,7 +83,7 @@ class DeltaSharingReader {
     async createDataFrame() {
 
         const response = await this.#restClient.listFilesInTable(
-            this.#table, this.#predicateHints, this.#limit
+            this.#table, this.#predicateHints, this.#limit, this.#jsonPredicateHints, this.#version
         );
 
         const schemaJson = response.metadata.schemaString;
