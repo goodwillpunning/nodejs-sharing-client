@@ -137,6 +137,39 @@ class DeltaSharingReader {
             return results.flat();
         }
     }
+
+    async #toGenerator(addFile, converters, limit) {
+        const url = addFile.url;
+        var protocol = parse(addFile.url, true).protocol
+
+        let reader = await parquet.ParquetReader.openUrl(request, url)
+        let cursor = reader.getCursor();
+        let record = null;
+        while (record = await cursor.next()) {
+            yield record;
+        }
+        await reader.close();
+    }
+
+
+    async *createDataGenerator() {
+        const response = await this.#restClient.listFilesInTable(
+            this.#table, this.#predicateHints, this.#limit
+        );
+
+        // Return if no data present
+        if (response.addFiles.length === 0 || this.#limit == 0) {
+            return;
+        }
+
+        if (this.#limit == null) {
+            for await (const row of this.#toGenerator(addFile, null, null)) {
+                yield row;
+            }
+        }
+    }
+
 }
+
 
 module.exports = { DeltaSharingReader };
